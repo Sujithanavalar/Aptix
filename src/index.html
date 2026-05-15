@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aptitude Platform - Ages Module</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* =========================================
+           CSS STYLES
+           ========================================= */
+        
+        :root {
+            --primary: #2c3e50;    /* Dark Navy */
+            --accent: #3498db;     /* Professional Blue */
+            --user-bg: #3498db;    /* User Bubble Color */
+            --bot-bg: #f1f2f6;     /* Bot Bubble Color */
+            --text-main: #2f3542;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #dfe4ea;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Mock Website Content --- */
+        .page-content {
+            flex: 1;
+            padding: 40px;
+            text-align: center;
+            color: #57606f;
+        }
+        .info-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 600px;
+            margin: 20px auto;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        /* --- CHAT LAUNCHER BUTTON --- */
+        .chat-launcher {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 65px;
+            height: 65px;
+            background: var(--primary);
+            color: var(--white);
+            border-radius: 50%;
+            border: none;
+            font-size: 26px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s, background 0.2s;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chat-launcher:hover {
+            transform: scale(1.1);
+            background: var(--accent);
+        }
+
+        /* --- MAIN CHAT CONTAINER --- */
+        .chat-container {
+            position: fixed;
+            bottom: 105px;
+            right: 30px;
+            width: 380px;
+            height: 600px;
+            max-height: 80vh; /* Responsive height */
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 9999;
+            transform-origin: bottom right;
+            transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .chat-container.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.9) translateY(20px);
+        }
+
+        /* --- HEADER --- */
+        .chat-header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .header-title i { margin-right: 8px; }
+        .header-controls button {
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.8);
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 12px;
+            transition: color 0.2s;
+        }
+        .header-controls button:hover { color: white; }
+
+        /* --- CHAT BODY (SCROLL AREA) --- */
+        .chat-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            scroll-behavior: smooth;
+        }
+
+        /* --- MESSAGES BUBBLES --- */
+        .msg {
+            max-width: 85%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+            position: relative;
+            animation: slideUp 0.3s ease;
+            word-wrap: break-word;
+        }
+
+        .bot {
+            align-self: flex-start;
+            background: var(--bot-bg);
+            color: var(--text-main);
+            border-bottom-left-radius: 4px;
+        }
+
+        .user {
+            align-self: flex-end;
+            background: var(--user-bg);
+            color: var(--white);
+            border-bottom-right-radius: 4px;
+        }
+
+        /* Formatting inside bubbles */
+        .msg ul { margin: 5px 0 5px 20px; padding: 0; }
+        .msg li { margin-bottom: 5px; }
+        .msg strong { color: #e74c3c; font-weight: 700; }
+        .msg .math-box {
+            background: #fff;
+            padding: 8px;
+            border-left: 3px solid var(--accent);
+            margin: 8px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #333;
+        }
+
+        /* --- OPTIONS / INPUT AREA --- */
+        .options-area {
+            padding: 15px;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: flex-end;
+            min-height: 60px;
+        }
+
+        .opt-btn {
+            padding: 8px 16px;
+            background: var(--white);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .opt-btn:hover {
+            background: var(--accent);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(52, 152, 219, 0.3);
+        }
+
+        /* Style for 'Main Menu' or 'Back' buttons to distinguish them */
+        .opt-btn.nav-btn {
+            border-color: #95a5a6;
+            color: #7f8c8d;
+        }
+        .opt-btn.nav-btn:hover {
+            background: #95a5a6;
+            color: white;
+        }
+
+        /* --- TYPING INDICATOR --- */
+        .typing-indicator {
+            padding: 10px;
+            background: var(--bot-bg);
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            align-self: flex-start;
+            display: flex;
+            gap: 5px;
+            width: fit-content;
+            margin-bottom: 5px;
+        }
+        .typing-indicator span {
+            width: 6px;
+            height: 6px;
+            background: #bdc3c7;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+        .hidden { display: none !important; }
+
+        /* Animations */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="page-content">
+        <h1>Topic: Problems on Ages</h1>
+        <div class="info-card">
+            <h3><i class="fas fa-book-open"></i> Learning Module</h3>
+            <p>Welcome to the Ages aptitude page. This topic covers calculation of ages based on ratios and timelines.</p>
+            <p><strong>Need help?</strong> Click the chat icon at the bottom right to start the interactive guide.</p>
+        </div>
+    </div>
+
+    <button id="chat-launcher" class="chat-launcher">
+        <i class="fas fa-comments"></i>
+    </button>
+
+    <div id="chat-container" class="chat-container hidden">
+        
+        <div class="chat-header">
+            <div class="header-title">
+                <i class="fas fa-calculator"></i> Ages Assistant
+            </div>
+            <div class="header-controls">
+                <button id="refresh-chat" title="Reset Conversation"><i class="fas fa-sync-alt"></i></button>
+                <button id="close-chat" title="Minimize"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+
+        <div id="chat-body" class="chat-body">
+            <div id="typing-indicator" class="typing-indicator hidden">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+
+        <div id="options-area" class="options-area">
+            </div>
+
+    </div>
+
+    <script>
+        // --- 1. DATA: The Decision Tree (Ages Topic) ---
+        // This object holds all the conversation logic based on your images.
+        
+        const agesLogic = {
+            // Root Node
+            start: {
+                text: "Hello! I am your <b>Ages Topic Assistant</b>.<br>I can guide you through concepts, formulas, or detailed solved examples.",
+                options: [
+                    { label: "📖 Key Concepts", next: "concepts" },
+                    { label: "∑ Important Formulas", next: "formulas" },
+                    { label: "📝 Solved Example (Step-by-Step)", next: "example_intro" },
+                    { label: "❓ Common Doubts", next: "doubts" }
+                ]
+            },
+
+            // --- CONCEPTS BRANCH ---
+            concepts: {
+                text: "Here are the core concepts for Age problems:<br><br>1. <b>Constant Difference:</b> The age difference between two people <i>never</i> changes. If Dad is 20 years older today, he is 20 years older forever.<br>2. <b>Timeline:</b> Past (-n) | Present (x) | Future (+n).",
+                options: [
+                    { label: "Show Formulas", next: "formulas" },
+                    { label: "See an Example", next: "example_intro" },
+                    { label: "🏠 Main Menu", next: "start" }
+                ]
+            },
+
+            // --- FORMULAS BRANCH ---
+            formulas: {
+                text: "<b>Essential Formulas:</b><br><ul><li><b>n years ago:</b> Age - n</li><li><b>n years hence/later:</b> Age + n</li><li><b>Ratio a:b:</b> Express as <i>ax</i> and <i>bx</i></li><li><b>A is n times B:</b> A = nB</li></ul>",
+                options: [
+                    { label: "Apply to Example", next: "example_intro" },
+                    { label: "🏠 Main Menu", next: "start" }
+                ]
+            },
+
+            // --- EXAMPLE BRANCH (Step-by-Step) ---
+            example_intro: {
+                text: "Let's solve this problem together:<br><div class='math-box'>Father is 3 times as old as his son. After 12 years, his age will be twice that of his son. Find their present ages.</div><br>Shall we solve it step-by-step?",
+                options: [
+                    { label: "Yes, Start with Variables", next: "ex_step1" },
+                    { label: "Just show the answer", next: "ex_answer" },
+                    { label: "🏠 Main Menu", next: "start" }
+                ]
+            },
+            ex_step1: {
+                text: "<b>Step 1: Assign Variables</b><br>We don't know the exact ages, but we know the ratio.<br><br>Let Son's age = <b>x</b><br>Since Father is 3 times older, Father's age = <b>3x</b>",
+                options: [
+                    { label: "Step 2: Apply Timeline", next: "ex_step2" },
+                    { label: "Wait, explain the ratio", next: "doubt_ratio" }
+                ]
+            },
+            ex_step2: {
+                text: "<b>Step 2: The Timeline (After 12 Years)</b><br>We need to add 12 to BOTH ages.<br><br>Son's age = <b>x + 12</b><br>Father's age = <b>3x + 12</b>",
+                options: [
+                    { label: "Step 3: Form Equation", next: "ex_step3" }
+                ]
+            },
+            ex_step3: {
+                text: "<b>Step 3: The Condition</b><br>The problem says: <i>Father will be twice (2x) the son.</i><br><br>Equation:<br><div class='math-box'>3x + 12 = 2(x + 12)</div>",
+                options: [
+                    { label: "Step 4: Solve", next: "ex_step4" }
+                ]
+            },
+            ex_step4: {
+                text: "<b>Step 4: Calculation</b><br>3x + 12 = 2x + 24<br>3x - 2x = 24 - 12<br><b>x = 12</b><br><br>So, Son = 12 years, Father = 36 years.",
+                options: [
+                    { label: "Try another doubt", next: "doubts" },
+                    { label: "🏠 Main Menu", next: "start" }
+                ]
+            },
+            ex_answer: {
+                text: "<b>Solution:</b><br>3x + 12 = 2(x + 12)<br>x = 12.<br><br>Son is 12, Father is 36.",
+                options: [
+                    { label: "Explain the steps", next: "ex_step1" },
+                    { label: "🏠 Main Menu", next: "start" }
+                ]
+            },
+
+            // --- DOUBTS BRANCH ---
+            doubts: {
+                text: "Select a common doubt:",
+                options: [
+                    { label: "How to handle Ratios?", next: "doubt_ratio" },
+                    { label: "Meaning of 'Hence'?", next: "doubt_words" },
+                    { label: "🏠 Main Menu", next: "start" }
+                ]
+            },
+            doubt_ratio: {
+                text: "<b>Ratio Rule:</b><br>If ages are in ratio A:B, <b>never</b> assume the ages are just A and B.<br>Always multiply by a variable x. So, ages are <b>Ax</b> and <b>Bx</b>.",
+                options: [ { label: "Got it", next: "start" } ]
+            },
+            doubt_words: {
+                text: "<b>Keywords:</b><br>Ago / Before = Subtract (-)<br>Hence / After / Later = Add (+)",
+                options: [ { label: "Got it", next: "start" } ]
+            }
+        };
+
+        // --- 2. DOM ELEMENTS ---
+        const launcher = document.getElementById('chat-launcher');
+        const container = document.getElementById('chat-container');
+        const chatBody = document.getElementById('chat-body');
+        const optionsArea = document.getElementById('options-area');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const closeBtn = document.getElementById('close-chat');
+        const refreshBtn = document.getElementById('refresh-chat');
+
+        let isChatOpen = false;
+
+        // --- 3. EVENT LISTENERS ---
+        launcher.addEventListener('click', toggleChat);
+        closeBtn.addEventListener('click', toggleChat);
+        
+        refreshBtn.addEventListener('click', () => {
+            // Clear chat and restart
+            chatBody.innerHTML = '';
+            chatBody.appendChild(typingIndicator); // Keep indicator in DOM
+            processNode('start');
+        });
+
+        // --- 4. FUNCTIONS ---
+
+        function toggleChat() {
+            isChatOpen = !isChatOpen;
+            if (isChatOpen) {
+                container.classList.remove('hidden');
+                // Start conversation if empty
+                if (chatBody.querySelectorAll('.msg').length === 0) {
+                    processNode('start');
+                }
+            } else {
+                container.classList.add('hidden');
+            }
+        }
+
+        function processNode(nodeKey) {
+            const data = agesLogic[nodeKey];
+            if (!data) return;
+
+            // Disable previous buttons
+            disableOldButtons();
+
+            // Show typing indicator
+            showTyping();
+
+            // Simulate "thinking" delay
+            setTimeout(() => {
+                hideTyping();
+                
+                // Add Bot Message
+                addMessage(data.text, 'bot');
+
+                // Render New Options
+                renderOptions(data.options);
+
+            }, 600); // 600ms delay for natural feel
+        }
+
+        function addMessage(htmlContent, type) {
+            const div = document.createElement('div');
+            div.classList.add('msg', type);
+            div.innerHTML = htmlContent;
+            
+            // Insert before typing indicator so indicator stays at bottom
+            chatBody.insertBefore(div, typingIndicator);
+            scrollToBottom();
+        }
+
+        function renderOptions(options) {
+            optionsArea.innerHTML = ''; // Clear current area
+            
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.classList.add('opt-btn');
+                
+                // Add specific styling for "Main Menu" or "Back" buttons
+                if(opt.next === 'start' || opt.label.includes('Back')) {
+                    btn.classList.add('nav-btn');
+                }
+
+                btn.innerHTML = opt.label;
+                btn.onclick = () => {
+                    // 1. Show user selection as a message
+                    addMessage(opt.label, 'user');
+                    // 2. Clear buttons immediately to prevent double clicks
+                    optionsArea.innerHTML = '';
+                    // 3. Process next step
+                    processNode(opt.next);
+                };
+                
+                optionsArea.appendChild(btn);
+            });
+            scrollToBottom(); // Ensure options are visible
+        }
+
+        function disableOldButtons() {
+            const oldBtns = document.querySelectorAll('.opt-btn');
+            oldBtns.forEach(btn => {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.style.cursor = 'default';
+            });
+        }
+
+        function showTyping() {
+            typingIndicator.classList.remove('hidden');
+            scrollToBottom();
+        }
+
+        function hideTyping() {
+            typingIndicator.classList.add('hidden');
+        }
+
+        function scrollToBottom() {
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,448 @@
+/* stylelint-disable */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here.
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+
+    /* Navy Blue Primary Color */
+    --primary: 220 80% 25%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 220 70% 35%;
+
+    /* Orange Secondary Color */
+    --secondary: 25 95% 53%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-light: 25 90% 63%;
+
+    /* Yellow Accent Color */
+    --accent: 45 100% 51%;
+    --accent-foreground: 220 80% 25%;
+    --accent-light: 45 100% 65%;
+
+    /* Neutral Colors */
+    --background: 0 0% 98%;
+    --foreground: 220 20% 20%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 20%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 20%;
+    --muted: 220 15% 95%;
+    --muted-foreground: 220 10% 45%;
+
+    /* Semantic Colors */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --warning: 45 100% 51%;
+    --warning-foreground: 220 80% 25%;
+
+    /* UI Elements */
+    --border: 220 15% 88%;
+    --input: 220 15% 88%;
+    --ring: 220 80% 25%;
+
+    /* Charts */
+    --chart-1: 220 80% 25%;
+    --chart-2: 25 95% 53%;
+    --chart-3: 45 100% 51%;
+    --chart-4: 142 76% 36%;
+    --chart-5: 220 70% 35%;
+
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --info: 210 90% 50%;
+    --education-blue: 210 90% 46%;
+    --education-green: 142 70% 40%;
+    --sidebar-background: 220 15% 97%;
+    --sidebar-foreground: 220 20% 20%;
+    --sidebar-primary: 220 80% 25%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 25 95% 53%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 220 15% 88%;
+    --sidebar-ring: 220 80% 25%;
+    --gradient-primary: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--secondary)));
+    --gradient-card: linear-gradient(180deg, hsl(var(--card)), hsl(var(--muted)));
+    --gradient-background: linear-gradient(180deg, hsl(var(--background)), hsl(var(--muted)));
+    --shadow-card: 0 2px 8px hsl(var(--foreground) / 0.08);
+    --shadow-hover: 0 4px 12px hsl(var(--foreground) / 0.12);
+  }
+
+  .dark {
+    --background: 220 25% 10%;
+    --foreground: 0 0% 95%;
+    --card: 220 20% 15%;
+    --card-foreground: 0 0% 95%;
+    --popover: 220 20% 15%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 220 80% 45%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 220 70% 55%;
+    --secondary: 25 95% 53%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-light: 25 90% 63%;
+    --accent: 45 100% 51%;
+    --accent-foreground: 220 80% 15%;
+    --accent-light: 45 100% 65%;
+    --muted: 220 15% 20%;
+    --muted-foreground: 220 10% 65%;
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --warning: 45 100% 51%;
+    --warning-foreground: 220 80% 15%;
+    --border: 220 15% 25%;
+    --input: 220 15% 25%;
+    --ring: 220 80% 45%;
+    --chart-1: 220 80% 45%;
+    --chart-2: 25 95% 53%;
+    --chart-3: 45 100% 51%;
+    --chart-4: 142 76% 36%;
+    --chart-5: 220 70% 55%;
+    --info: 210 90% 60%;
+    --education-blue: 210 90% 60%;
+    --education-green: 142 70% 50%;
+    --sidebar-background: 220 22% 12%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 220 80% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 25 95% 53%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 220 15% 25%;
+    --sidebar-ring: 220 80% 45%;
+    --gradient-primary: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--secondary)));
+    --gradient-card: linear-gradient(180deg, hsl(var(--card)), hsl(var(--muted)));
+    --gradient-background: linear-gradient(180deg, hsl(var(--background)), hsl(var(--muted)));
+    --shadow-card: 0 2px 8px hsl(var(--foreground) / 0.12);
+    --shadow-hover: 0 4px 16px hsl(var(--foreground) / 0.18);
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  h1 {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+
+  @media (min-width: 1280px) {
+    h1 {
+      font-size: 3rem;
+      line-height: 1.1;
+    }
+  }
+
+  h2 {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+
+  @media (min-width: 1280px) {
+    h2 {
+      font-size: 2.25rem;
+      line-height: 2.5rem;
+    }
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+
+  @media (min-width: 1280px) {
+    h3 {
+      font-size: 1.875rem;
+      line-height: 2.25rem;
+    }
+  }
+
+  h4 {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  @media (min-width: 1280px) {
+    h4 {
+      font-size: 1.5rem;
+      line-height: 2rem;
+    }
+  }
+
+  p {
+    line-height: 1.6;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: slideInFromRight 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .animate-slide-back {
+    animation: slideInFromLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes slideInFromRight {
+    from {
+      opacity: 0.95;
+      transform: translateX(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInFromLeft {
+    from {
+      opacity: 0.95;
+      transform: translateX(-20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Reduced icon glow effects */
+  .icon-glow-primary {
+    filter: drop-shadow(0 0 6px hsl(var(--primary) / 0.3));
+  }
+
+  .icon-glow-secondary {
+    filter: drop-shadow(0 0 6px hsl(var(--secondary) / 0.3));
+  }
+
+  .icon-glow-accent {
+    filter: drop-shadow(0 0 6px hsl(var(--accent) / 0.3));
+  }
+
+  /* Subtle hover effects for cards */
+  .hover-glow-primary {
+    transition: var(--transition-smooth);
+  }
+
+  .hover-glow-primary:hover {
+    box-shadow: 0 4px 12px hsl(var(--primary) / 0.15);
+    transform: translateY(-2px);
+  }
+
+  .hover-glow-secondary {
+    transition: var(--transition-smooth);
+  }
+
+  .hover-glow-secondary:hover {
+    box-shadow: 0 4px 12px hsl(var(--secondary) / 0.15);
+    transform: translateY(-2px);
+  }
+
+  .hover-glow-accent {
+    transition: var(--transition-smooth);
+  }
+
+  .hover-glow-accent:hover {
+    box-shadow: 0 4px 12px hsl(var(--accent) / 0.15);
+    transform: translateY(-2px);
+  }
+
+  /* Button styles with proper hierarchy */
+  .btn-primary {
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    font-weight: 600;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    transition: var(--transition-smooth);
+  }
+
+  .btn-primary:hover {
+    background-color: hsl(var(--primary) / 0.9);
+    box-shadow: 0 4px 12px hsl(var(--primary) / 0.2);
+  }
+
+  .btn-secondary {
+    background-color: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+    font-weight: 600;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    transition: var(--transition-smooth);
+  }
+
+  .btn-secondary:hover {
+    background-color: hsl(var(--secondary) / 0.9);
+    box-shadow: 0 4px 12px hsl(var(--secondary) / 0.2);
+  }
+
+  .btn-accent {
+    background-color: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+    font-weight: 600;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    transition: var(--transition-smooth);
+  }
+
+  .btn-accent:hover {
+    background-color: hsl(var(--accent) / 0.9);
+    box-shadow: 0 4px 12px hsl(var(--accent) / 0.2);
+  }
+
+  .btn-outline {
+    border: 2px solid hsl(var(--primary));
+    color: hsl(var(--primary));
+    background: transparent;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    transition: var(--transition-smooth);
+  }
+
+  .btn-outline:hover {
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+
+  /* Card styles */
+  .card-elevated {
+    box-shadow: 0 2px 8px hsl(var(--foreground) / 0.08);
+  }
+
+  .card-elevated:hover {
+    box-shadow: 0 4px 16px hsl(var(--foreground) / 0.12);
+  }
+
+  /* Header button subtle hover effect */
+  .header-btn-hover {
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .header-btn-hover:hover {
+    background-color: hsl(var(--muted));
+  }
+
+  /* Text hierarchy utilities */
+  .text-display {
+    font-size: 3rem;
+    line-height: 1.1;
+    font-weight: 700;
+  }
+
+  @media (min-width: 1280px) {
+    .text-display {
+      font-size: 3.75rem;
+      line-height: 1.1;
+    }
+  }
+
+  .text-heading {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+    font-weight: 700;
+  }
+
+  @media (min-width: 1280px) {
+    .text-heading {
+      font-size: 2.25rem;
+      line-height: 2.5rem;
+    }
+  }
+
+  .text-subheading {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    font-weight: 600;
+  }
+
+  @media (min-width: 1280px) {
+    .text-subheading {
+      font-size: 1.5rem;
+      line-height: 2rem;
+    }
+  }
+
+  .text-body {
+    font-size: 1rem;
+    line-height: 1.625rem;
+  }
+
+  .text-small {
+    font-size: 0.875rem;
+  }
+}
+
+/* Mobile Mode Styles */
+.mobile-mode {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.mobile-mode .container {
+  max-width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.mobile-mode .xl\:grid-cols-4 {
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+}
+
+.mobile-mode .xl\:grid-cols-2 {
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+}
+
+.mobile-mode .md\:grid-cols-2 {
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+}
+
+.mobile-mode .md\:grid-cols-3 {
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+}
+
+.mobile-mode .xl\:text-6xl {
+  font-size: 2.25rem !important;
+  line-height: 2.5rem !important;
+}
+
+.mobile-mode .xl\:text-4xl {
+  font-size: 1.875rem !important;
+  line-height: 2.25rem !important;
+}
+
+.mobile-mode .text-5xl {
+  font-size: 2rem !important;
+  line-height: 2.25rem !important;
+}
